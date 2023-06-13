@@ -11,7 +11,7 @@ export const register = (req, res) => {
 
   db.query(q, [req.body.email], (err,data) => {
     if (err)  return res.status(500).json(err);
-    if(data.lengthen) return res.status(409).json("User already exists!");
+    if(data.length) return res.status(409).json("User already exists!");
 
     //CREATE NEW USER
       //Hash password
@@ -43,14 +43,17 @@ export const logIn = (req, res) => {
 
     const token = jwt.sign({id: data[0].id}, process.env.JWT_SECRET);
 
-    const {password, ...other} = data[0];
+    const {password, ...others} = data[0];
 
     res.cookie("accessToken", token, {
       httpOnly: true,
-    }).status(200).json(other);
+    }).status(200).json(others);
   });
 }
 
 export const logOut = (req, res) => {
-  res.send("Hello, world from logout!");
+  res.clearCookie("accessToken", {
+    secure: true,
+    sameSite: "none"
+  }).status(200).json("User logged out");
 }
