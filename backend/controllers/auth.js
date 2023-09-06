@@ -18,9 +18,9 @@ export const register = (req, res) => {
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(req.body.password, salt);
       
-      const q = "INSERT INTO users (firstName, lastName, email, password) VALUES (?)"
+      const q = "INSERT INTO users (firstName, lastName, email, userName, password) VALUES (?)"
 
-      const values = [req.body.firstName, req.body.lastName, req.body.email, hashedPassword]
+      const values = [req.body.firstName, req.body.lastName, req.body.email, req.body.userName, hashedPassword]
 
       db.query(q, [values], (err,data) => {
         if (err) return res.status(500).json(err);
@@ -35,7 +35,7 @@ export const logIn = (req, res) => {
 
   db.query(q, [req.body.email], (err,data) => {
     if (err) return res.status(500).json(err);
-    if (data.length === 0) return res.status(404).json("User not found!");
+    if (data.length === 0) return res.status(400).json("Wrong password or username!");
 
     const isPassword = bcrypt.compareSync(req.body.password, data[0].password);
 
@@ -47,6 +47,10 @@ export const logIn = (req, res) => {
 
     res.cookie("accessToken", token, {
       httpOnly: true,
+      // sameSite: "none",
+      // secure: true,
+      // domain: "localhost",
+      // path: "/"
     }).status(200).json(others);
   });
 }

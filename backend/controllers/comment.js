@@ -1,3 +1,9 @@
+import { addDbComment, getDbComments } from "../Database/dbQuerry/dbComments.js"
+
 export const getComments = (req, res) => {
-  res.send("Hello, world from comments!");
+  getDbComments(req, res);
+}
+
+export const addComment = (req, res) => {
+  addDbComment(req, res);
 }
