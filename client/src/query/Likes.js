@@ -23,6 +23,8 @@ export const addLike = async (postId, userId) => {
 
     const likes = response.data;
 
+    console.log("likes: " + likes);
+
     return likes;
 
   } catch (error) {

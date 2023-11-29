@@ -111,7 +111,13 @@ const Login = () => {
 
   const handleFacebookLogin = async() => {
     // Handle login with Facebook
-    const res = await signIn('facebook')
+    // const res = await signIn('facebook');
+    try {
+      signIn('facebook', {callbackUrl: "http://localhost:3000"})
+      // console.log('Google login res:', res)
+    } catch (error) {
+      console.error('Error during Google login:', error)
+    }
   };
 
   const user = useSession();

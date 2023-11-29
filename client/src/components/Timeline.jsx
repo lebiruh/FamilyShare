@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from 'react'
-import {Avatar, Box, Button, Stack, TextField} from '@mui/material'
+import {Avatar, Box, Button, Stack, TextField, Typography, CircularProgress} from '@mui/material'
 import Post from './Post'
-import { addPosts, getPosts } from '@/query/Posts'
+import { addPosts, deletePost, getPosts } from '@/query/Posts'
 import {
   useQuery,
   useMutation,
@@ -19,13 +19,13 @@ import axios from 'axios'
 
 const Timeline = ({familyId, userId}) => {
 
-  // const session = useSession();
+  const session = useSession();
 
   // console.log("Timeline user: ", session);
 
-  // const userEmail = session.data?.token.email;
+  const userEmail = session.data?.token.email;
 
-  // const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail) })
+  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail), enabled: !!userEmail })
 
   // const userId = user?.data?.id;  
 
@@ -69,6 +69,18 @@ const Timeline = ({familyId, userId}) => {
       onSuccess: () => {queryClient.invalidateQueries({queryKey: ['posts', familyId]})}
     })
 
+  const getPostsMutation = useMutation({
+      mutationFn: ({postId}) => deletePost(postId),
+      onSuccess: () => {queryClient.invalidateQueries({queryKey: ['posts', familyId]})}
+    })
+
+  const handleDelete = (postId) => {
+    console.log("Delete post: " + postId);   
+    getPostsMutation.mutate({postId}); 
+  }
+
+  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("post");
@@ -83,7 +95,8 @@ const Timeline = ({familyId, userId}) => {
     <Box flex={3}>
       <Box height={150} bgcolor='white' borderRadius={5} p={3} m={2}>
           <UserBox>
-            <Avatar sx={{width: 30, height: 30}}/>            
+            <Avatar sx={{width: 30, height: 30}}/>
+            <Typography>{user?.data?.firstName}</Typography>            
           </UserBox>
           <Box >
             <TextField sx={{width:'80%'}} id='standard-multiline-static' multiline rows={2} placeholder="What's on your mind?" variant='standard' name="content"
@@ -106,11 +119,11 @@ const Timeline = ({familyId, userId}) => {
         </Box>
       {
         query.isLoading ? 
-        <h1>Loading...</h1> :
+        <CircularProgress /> :
         query.error ? 
         <h1>Error</h1> :
         query?.data.map((data, idx) => (
-        <Post data = {data} userId={userId} key={idx}/>
+        <Post data = {data} userId={userId} handleDelete={handleDelete} key={idx}/>
       ))
       }
     </Box>

@@ -11,9 +11,10 @@ import Comments from './Comments';
 import DeletePosts from './deletePosts';
 import { getComments } from '@/query/comments';
 import Image from 'next/image';
+import { deletePost } from '@/query/Posts';
 
 
-const Post = ({data, userId}) => {
+const Post = ({data, userId, handleDelete}) => {
 
   const [commentsOpen, setCommentsOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -24,6 +25,10 @@ const Post = ({data, userId}) => {
 
   const posterId = data?.userId;
 
+  // console.log("data: " + data.familyId);
+
+  const familyId = data?.familyId
+
   const likesQuery = useQuery({ queryKey: ['likes', postId], queryFn: () => getLikes(postId), enabled: !!postId})
 
   const numberOfLikesCount = likesQuery?.data?.length;
@@ -31,6 +36,9 @@ const Post = ({data, userId}) => {
   const likeUserIds = likesQuery.data?.map(data => data.userId);
 
   console.log("likeUserIds: ", likeUserIds);
+
+  // const deletePostQuery = useQuery({ queryKey: ['delete', postId], queryFn: () => deletePost(postId), enabled: !!postId})
+
 
   const queryClient = useQueryClient();
 
@@ -42,16 +50,29 @@ const Post = ({data, userId}) => {
   const removeLikeMutation = useMutation({
       mutationFn: ({postId, userId}) => removeLike(postId, userId),
       onSuccess: () => {queryClient.invalidateQueries({queryKey: ['likes', postId]})}
-    })
+    })  
+
+  // const getPostsMutation = useMutation({
+  //     mutationFn: ({postId}) => deletePost(postId),
+  //     onSuccess: () => {queryClient.invalidateQueries({queryKey: ['posts', familyId]})}
+  //   })  
 
   const handleLike = () => {
-
-    if (!likeUserIds.includes(userId)) {
+    // if (!likeUserIds.includes(userId)) {
       addLikeMutation.mutate({postId, userId});
-    }
+    // }
     
+    // removeLikeMutation.mutate({postId, userId}); 
+  }
+
+  const handleDislike = () => {
     removeLikeMutation.mutate({postId, userId}); 
   }
+
+
+  // const handleDelete = () => {   
+  //   getPostsMutation.mutate({postId}); 
+  // }
 
   // const commentsQuery = useQuery({ queryKey: ['comments', postId], queryFn: () => getComments(postId), enabled: !!postId})
 
@@ -94,7 +115,7 @@ const Post = ({data, userId}) => {
           </Avatar>
         }
         action={ posterId === userId ? 
-          (<IconButton aria-label="settings" onClick={() => setDeleteOpen(!deleteOpen)}>
+          (<IconButton aria-label="settings" onClick={() => handleDelete(postId)}>
             <Delete />
           </IconButton>) : null
         }
@@ -115,13 +136,17 @@ const Post = ({data, userId}) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" onClick={handleLike}>
+        {/* <IconButton aria-label="add to favorites" onClick={handleLike}> */}
           {likeUserIds?.includes(userId) ? 
-            <Favorite htmlColor='red' /> : 
-            <FavoriteBorder/>
+            <IconButton aria-label="add to favorites" onClick={handleDislike}>
+              <Favorite htmlColor='red' />
+            </IconButton> : 
+            <IconButton aria-label="add to favorites" onClick={handleLike}>
+              <FavoriteBorder/>
+            </IconButton>
           }
                    
-        </IconButton>
+        {/* </IconButton> */}
         <Typography variant="body2" width={50}>
           {numberOfLikesCount === 0 || undefined ?
             "" : 

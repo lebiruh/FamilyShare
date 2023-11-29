@@ -22,6 +22,9 @@ import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByEmail } from '@/query/User';
+import ChangePassword from './ChangePassword';
+import { Autocomplete, InputAdornment, TextField } from '@mui/material';
+import axios from 'axios';
 // import { createTheme, ThemeProvider } from '@mui/system';
 
 
@@ -51,7 +54,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase  = styled(InputBase)(({ theme }) => ({
   color: theme.palette.text.primary,
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
@@ -65,12 +68,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  // height: '80%',
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'rgba(0, 0, 0, 0.23)',
+    },
+    '&:hover fieldset': {
+      borderColor: 'rgba(0, 0, 0, 0.23)',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+  },
+}));
+
+const StyledAutocomplete = styled(Autocomplete)({
+  '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]': {
+    padding: '2px 3px',
+  },
+});
+
 
 const Navbar = ({userEmail}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
+
   const router = useRouter();
+
+  const [query, setQuery] = React.useState('');
+
+  const { data: results = [] } = useQuery(['search', query], () =>
+    axios.get(`http://localhost:5000/api/search?query=${query}`).then((res) => res.data),
+    {
+      enabled: !!query,
+    }
+  );
+
+  const handleInputChange = (event, value) => {
+    setQuery(value);
+  };
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -126,7 +164,7 @@ const Navbar = ({userEmail}) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Change Password</MenuItem>
+      <MenuItem onClick={handleMenuClose}><ChangePassword/></MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
@@ -195,20 +233,44 @@ const Navbar = ({userEmail}) => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' }, color: '#1976d2'}}
+            sx={{ display: { xs: 'none', sm: 'block' }, color: '#1976d2', marginRight: '20px', fontWeight: 'bolder' }}
             >
-            FamilyShare
+            familyShare
           </Typography>
           <Diversity3Icon sx={{ display: { xs: 'block', sm: 'none' }, color: '#1976d2', mr: 2}}/>
-          <Search>
+          {/* <Search>
             <SearchIconWrapper>
               <SearchIcon sx={{ color: '#000', opacity: 0.5}}/>
-            </SearchIconWrapper>
-            <StyledInputBase
+            </SearchIconWrapper> */}
+            {/* <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              /> */}
+            <Box sx={{ width: 400, height: 50 }}>
+              <StyledAutocomplete
+                // sx={{ padding: '2px 3px'}}
+                freeSolo
+                options={results.map((option) => option.name)}
+                onInputChange={handleInputChange}
+                renderInput={(params) => (
+                  // <StyledTextField {...params} label="Search users" variant="outlined" />
+                  <StyledTextField 
+                    {...params} 
+                    label="Search user" 
+                    variant="outlined"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                )}
               />
-          </Search>
+            </Box>
+          {/* </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">

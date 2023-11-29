@@ -1,5 +1,5 @@
 export {default} from "next-auth/middleware";
 
 export const config = {
-  matcher: ['/', '/family_group/:path*']
+  matcher: ['/', '/family_group/:path*', '/family-groups']
 }

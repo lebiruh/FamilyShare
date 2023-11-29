@@ -1,7 +1,7 @@
 import {db} from "../connectDB.js";
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
-import { getDbPosts, addDbPosts } from "../Database/dbQuerry/posts.js";
+import { getDbPosts, addDbPosts, deleteDbPost } from "../Database/dbQuerry/posts.js";
 
 export const getPosts = (req, res) => {
 
@@ -70,5 +70,22 @@ export const addPost = (req, res) => {
     //   return res.status(200).json("Post has been created");
     // });
   // });  
+
+};
+
+export const deletePost = (req, res) => {
+  // const token = req.cookies.accessToken;
+
+  const nextAuthToken = req.cookies['next-auth.session-token'];
+
+  // console.log(nextAuthToken);
+
+  const token = req.cookies.accessToken || nextAuthToken;
+
+  if (!token) return res.status(401).json("Not logged in");
+
+
+  deleteDbPost(req, res);
+
 
 };

@@ -11,6 +11,8 @@ import addFamilyMemberRoutes from './routes/addFamilyMember.js';
 import getFamilyRoutes from './routes/getFamily.js';
 import cookieParser from 'cookie-parser';
 import removeLikeRoute from "./routes/removeLike.js";
+import deletePostRoute from "./routes/deletePost.js";
+import searchUserRoute from "./routes/searchUser.js";
 import multer from "multer";
 import path from "path";
 
@@ -53,6 +55,8 @@ app.use('/api/removelike', removeLikeRoute);
 app.use('/api/createFamily', createFamilyRoutes);
 app.use('/api/addFamilyMember', addFamilyMemberRoutes); 
 app.use('/api/getFamily', getFamilyRoutes); 
+app.use('/api/deletePost', deletePostRoute); 
+app.use('/api/search', searchUserRoute); 
 
 
 app.listen(port, () => {

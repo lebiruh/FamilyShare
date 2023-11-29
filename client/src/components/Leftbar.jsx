@@ -19,7 +19,7 @@ const Leftbar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component="a" href='#familygroup'>
+            <ListItemButton component="a" href='/family-groups'>
               <ListItemIcon>
                 <GroupsIcon />
               </ListItemIcon>

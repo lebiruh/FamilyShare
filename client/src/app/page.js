@@ -15,11 +15,12 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // import HomeFamilyData from '@/components/HomeFamilyData'
 import Home from '@/components/Home'
 import Loading from '@/components/Loading'
 import { getUserByEmail } from '@/query/User'
+import { getFamilies } from '@/query/Family'
 // import checkCookie from '@/helpers/checkCookie'
 // import Cookies from 'js-cookie';
 // import { useRouter as useNextRouter } from 'next/router';
@@ -65,12 +66,23 @@ export default function HomePage() {
   console.log("Session is: ", session);
 
   // const userQuery = useQuery({ queryKey: ["user", userEmail], queryFn: getUserByEmail(userEmail) })
-
-
-  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail) })
+  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail), enabled: !!userEmail })
 
   const userId = user?.data?.id;  
 
+  const {data: families} = useQuery({ queryKey: ["families", userId], queryFn: () => getFamilies(userId), enabled: !!userId })
+
+  console.log("Families is: ", families);
+
+  const familyGroup = families?.data[0]?.Id;
+
+  console.log("FamilyGroup is: ", familyGroup);
+
+  useEffect(() => {
+    if(session.status === 'authenticated' && familyGroup !== undefined) {
+      router.push(`/family_group/${familyGroup}`);
+    }
+  }, [session.status, familyGroup]);
 
 
   if(session.status === 'loading') {
@@ -83,31 +95,38 @@ export default function HomePage() {
   if(session.status === 'unauthenticated') {
     return (
     <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', width: '100vw', display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: "center"}}>
-      <div>Error...</div>
+      <div>Not authenticated...</div>
     </Box>
     )
     // router.push("/login");   
   }
 
+  
+  // if(session.status === 'authenticated' && familyGroup !== undefined) {
 
-  return (
+  //   router.push(`/family_group/${familyGroup}`);
+
+  // } 
+
+
+  // return (
     // user ? (
       // <QueryClientProvider client={queryClient}>
-        <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', display: "flex", flexDirection: 'column', alignItems: "center"}}>
-          <Navbar userEmail={userEmail}/>
-          <Stack spacing={2} 
-            direction='row'
-            justifyContent= "center"
-            sx={{ width: '75vw'}}
-          >        
-            <Leftbar />
-            <Home userEmail={userEmail}/>
-            <Rightbar />
-          </Stack>
-          <AddPost userId={userId} userEmail={userEmail}/>
-        </Box>
+        // <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', display: "flex", flexDirection: 'column', alignItems: "center"}}>
+        //   <Navbar userEmail={userEmail}/>
+        //   <Stack spacing={2} 
+        //     direction='row'
+        //     justifyContent= "center"
+        //     sx={{ width: '75vw'}}
+        //   >        
+        //     <Leftbar />
+        //     <Home userEmail={userEmail}/>
+        //     <Rightbar />
+        //   </Stack>
+        //   <AddPost userId={userId} userEmail={userEmail}/>
+        // </Box>
       // </QueryClientProvider>
     // ) :
     // router.push('/login')
-  )
+  // )
 }

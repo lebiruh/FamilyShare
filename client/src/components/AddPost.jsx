@@ -24,9 +24,9 @@ const AddPost = ({userId, userEmail}) => {
   const [familyData, setFamilyData] = useState({userId: userId, familyName: ''})
 
 
-  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail) })
+  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail), enabled: !!userEmail })
 
-  // console.log("userData for family frontend is: ", user);
+  console.log("userData for family frontend is: ", user);
 
   // const userId = user?.data?.id;
 

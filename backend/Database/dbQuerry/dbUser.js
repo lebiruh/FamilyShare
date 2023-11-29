@@ -1,5 +1,5 @@
 import {db} from "../../connectDB.js";
-import moment from 'moment';
+// import moment from 'moment';
 
 export const getDbUser = (req, res, userEmail) => {
 
@@ -13,7 +13,9 @@ export const getDbUser = (req, res, userEmail) => {
 
       // if (err) return err;
       
-      console.log("userData from backend is: ", data[0].id);
+      console.log("userData from backend is: ", data[0]);
+
+      // console.log("userData from backend is: ", data[0].id);
 
       const {password, ...others} = data[0];
 

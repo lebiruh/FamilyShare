@@ -38,5 +38,19 @@ export const addDbPosts = (req, res) => {
     // console.log(data);
     return res.status(200).json("Post has been created");
   });
+}
+
+export const deleteDbPost = (req, res) => {
+
+  const postId = req.params.postId
+
+  const q = "DELETE FROM posts WHERE id = ?"
+
+
+  db.query(q, [postId], (err, data) => { 
+    if (err) return res.status(500).json(err);
+    // console.log(data);
+    return res.status(200).json("Post has been deleted!");
+  });
 
 }

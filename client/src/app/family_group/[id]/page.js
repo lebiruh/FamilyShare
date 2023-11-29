@@ -29,6 +29,15 @@ export default function Home({params}) {
 
   console.log("session: ", session);
 
+  const userEmail = session.data?.token.email;
+
+  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail), enabled: !!userEmail })
+
+  const userId = user?.data?.id;  
+
+  console.log("UserId on timeline: ", userId);
+
+
   if(session.status === 'loading') {
     return (
     <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', width: '100vw', display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: "center"}}>
@@ -39,19 +48,11 @@ export default function Home({params}) {
   if(session.status === 'unauthenticated') {
     return (
     <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', width: '100vw', display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: "center"}}>
-      <div>Error...</div>
+      <div>Not authenticated...</div>
     </Box>
     )
   }
-
-  const userEmail = session.data?.token.email;
-
-  const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail) })
-
-  const userId = user?.data?.id;  
-
-  console.log("UserId on timeline: ", userId);
-
+  
 
   return (
     <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', display: "flex", flexDirection: 'column', alignItems: "center"}}>
@@ -65,7 +66,7 @@ export default function Home({params}) {
         <Timeline familyId={familyId} userId={userId}/>
         <Rightbar />
       </Stack>
-      <AddPost />
+      {/* <AddPost /> */}
     </Box>
   )
 }
