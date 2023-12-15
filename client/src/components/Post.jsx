@@ -2,16 +2,14 @@
 
 import React, { useState } from 'react';
 import { Avatar, Box, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material';
-import { Favorite, FavoriteBorder, MoreVert, Share, TextsmsOutlined, Delete } from '@mui/icons-material';
-// import DeleteIcon from '@mui/icons-material/Delete';
+import { Favorite, FavoriteBorder, TextsmsOutlined, Delete } from '@mui/icons-material';
+
 import { addLike, getLikes, removeLike } from '@/query/Likes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import Comments from './Comments';
 import DeletePosts from './deletePosts';
-import { getComments } from '@/query/comments';
-import Image from 'next/image';
-import { deletePost } from '@/query/Posts';
+
 
 
 const Post = ({data, userId, handleDelete}) => {
@@ -25,8 +23,6 @@ const Post = ({data, userId, handleDelete}) => {
 
   const posterId = data?.userId;
 
-  // console.log("data: " + data.familyId);
-
   const familyId = data?.familyId
 
   const likesQuery = useQuery({ queryKey: ['likes', postId], queryFn: () => getLikes(postId), enabled: !!postId})
@@ -34,11 +30,6 @@ const Post = ({data, userId, handleDelete}) => {
   const numberOfLikesCount = likesQuery?.data?.length;
 
   const likeUserIds = likesQuery.data?.map(data => data.userId);
-
-  console.log("likeUserIds: ", likeUserIds);
-
-  // const deletePostQuery = useQuery({ queryKey: ['delete', postId], queryFn: () => deletePost(postId), enabled: !!postId})
-
 
   const queryClient = useQueryClient();
 
@@ -52,17 +43,8 @@ const Post = ({data, userId, handleDelete}) => {
       onSuccess: () => {queryClient.invalidateQueries({queryKey: ['likes', postId]})}
     })  
 
-  // const getPostsMutation = useMutation({
-  //     mutationFn: ({postId}) => deletePost(postId),
-  //     onSuccess: () => {queryClient.invalidateQueries({queryKey: ['posts', familyId]})}
-  //   })  
-
   const handleLike = () => {
-    // if (!likeUserIds.includes(userId)) {
       addLikeMutation.mutate({postId, userId});
-    // }
-    
-    // removeLikeMutation.mutate({postId, userId}); 
   }
 
   const handleDislike = () => {
@@ -70,38 +52,6 @@ const Post = ({data, userId, handleDelete}) => {
   }
 
 
-  // const handleDelete = () => {   
-  //   getPostsMutation.mutate({postId}); 
-  // }
-
-  // const commentsQuery = useQuery({ queryKey: ['comments', postId], queryFn: () => getComments(postId), enabled: !!postId})
-
-  // console.log("comments query: ", commentsQuery);
-
-  // const comments = [
-  //   {
-  //     id: 1,
-  //     author: "Biruh",
-  //     text: "Welcome",
-  //     date: "2023-07-08"
-  //   },
-  //   {
-  //     id: 2,
-  //     author: "Author",
-  //     text: "Weldone",
-  //     date: "2023-07-08"
-  //   },
-  //   {
-  //     id: 3,
-  //     author: "GetComments",
-  //     text: "I love it.",
-  //     date: "2023-07-08"
-  //   },
-  // ]
-
-  // const comments = commentsQuery.data;
-
-  // console.log("comments are: ", comments);
   const filepath = `/upload/${data.image}`
 
   console.log("File path is: ", filepath);

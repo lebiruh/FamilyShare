@@ -11,22 +11,12 @@ import {
 } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import { useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient } from "@tanstack/react-query";
 import { logIn } from "@/query/User";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 
 const Login = () => {
-
-  // const queryClient = useQueryClient();
-
-  // const mutation = useMutation({
-  //   mutationFn:  logIn
-  //   });
 
   const [loginData, setLoginData] = useState({email:'', password:''});
 
@@ -35,19 +25,12 @@ const Login = () => {
 
   const router = useRouter()
 
-  // const session = useSession();
-
   const handleChange = (e) => {
     setLoginData(prev=> ({...prev, [e.target.name]: e.target.value}) );
   }
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    // Handle login with username and password
-    // const response = await logIn();
-
-    // console.log("Logged in as:", response);
-    // response.data ? router.push("/") : setError(response.response.data);
 
     const res = await signIn('credentials', {
       email: loginData.email,
@@ -55,8 +38,6 @@ const Login = () => {
       redirect: false
     })
 
-    console.log("login res: ", res);
-    console.log("loginData is: ", loginData);
     if(!res.error) {
       router.push("/");
     } else {
@@ -66,12 +47,7 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     // Handle login with Google
-    // const res = await signIn('google')
-
-    // console.log("Google login res: ", res);
-
-    // console.log("session from Google:", session);
-
+  
     try {
       signIn('google', {callbackUrl: "http://localhost:3000"})
       // console.log('Google login res:', res)
@@ -79,34 +55,7 @@ const Login = () => {
       console.error('Error during Google login:', error)
     }
 
-    // const session = useSession();
-
-    // if(!res.error) {
-    //   router.push("/");
-    // } else {
-    //   router.push("/error");
-    // }
-
-    // console.log("session from Google:", session);
-
-
-    // if(session.status === 'loading') {
-    //   return (
-    //     <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', width: '100vw', display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: "center"}}>
-    //       <div>Loadig...</div>
-    //     </Box>
-    //   )
-    // }
-    // if(session.status === 'unauthenticated') {
-    //   return (
-    //   <Box sx={{ bgcolor: '#f3f2ef', minHeight: '100vh', width: '100vw', display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: "center"}}>
-    //     <div>Error...</div>
-    //   </Box>
-    //   )
-    //   // router.push("/login");   
-    // }
-
-    // router.push("/");
+    
   };
 
   const handleFacebookLogin = async() => {
@@ -122,11 +71,6 @@ const Login = () => {
 
   const user = useSession();
 
-  console.log("Usesr is logged in: ",  user);
-
-  // if(user.status === 'authenticated') {
-  //   router.push("/");
-  // }
 
   return (
     

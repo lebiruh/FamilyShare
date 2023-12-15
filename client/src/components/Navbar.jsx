@@ -8,24 +8,19 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { getUserByEmail } from '@/query/User';
 import ChangePassword from './ChangePassword';
 import { Autocomplete, InputAdornment, TextField } from '@mui/material';
 import axios from 'axios';
-// import { createTheme, ThemeProvider } from '@mui/system';
+
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -132,18 +127,11 @@ const Navbar = ({userEmail}) => {
 
   //TODO: Handle logout 
   const handleLogout = async () => {
-    // let cookieName = document.cookie['next-auth.session-token']
-    // document.cookie = `${cookieName}=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
 
     await signOut();
 
-    // router.push('/login');
 
   };
-
-  // const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail) })
-
-  // console.log("The user is: ", user);
 
   
 
@@ -186,26 +174,7 @@ const Navbar = ({userEmail}) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem> */}
-      {/* <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem> */}
+      
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -226,7 +195,6 @@ const Navbar = ({userEmail}) => {
 
   return (
 
-    // <Box sx={{ flex: 1, mb: 2, position: 'sticky' }}>
       <AppBar position="sticky" sx={{ bgcolor: '#fff', mb: 2, minWidth: '100vw'}}>
         <Toolbar>  
           <Typography
@@ -238,22 +206,14 @@ const Navbar = ({userEmail}) => {
             familyShare
           </Typography>
           <Diversity3Icon sx={{ display: { xs: 'block', sm: 'none' }, color: '#1976d2', mr: 2}}/>
-          {/* <Search>
-            <SearchIconWrapper>
-              <SearchIcon sx={{ color: '#000', opacity: 0.5}}/>
-            </SearchIconWrapper> */}
-            {/* <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              /> */}
+     
             <Box sx={{ width: 400, height: 50 }}>
               <StyledAutocomplete
-                // sx={{ padding: '2px 3px'}}
                 freeSolo
                 options={results.map((option) => option.name)}
                 onInputChange={handleInputChange}
                 renderInput={(params) => (
-                  // <StyledTextField {...params} label="Search users" variant="outlined" />
+
                   <StyledTextField 
                     {...params} 
                     label="Search user" 
@@ -273,23 +233,7 @@ const Navbar = ({userEmail}) => {
           {/* </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon sx={{ color: '#000', opacity: 0.5}}/>
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon sx={{ color: '#000', opacity: 0.5}}/>
-              </Badge>
-            </IconButton> */}
-            {/* <Typography variant='body2' color='gray'>
-              {`Hello ${user?.data?.firstName}`}
-            </Typography> */}
+           
             <IconButton
               size="large"
               edge="end"
@@ -321,9 +265,7 @@ const Navbar = ({userEmail}) => {
         {renderMobileMenu}
         {renderMenu}
       </AppBar>
-      // {renderMobileMenu}
-      // {renderMenu}
-    // </Box>
+
 
   );
 }

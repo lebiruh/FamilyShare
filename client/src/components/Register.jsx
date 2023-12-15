@@ -8,25 +8,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient } from "@tanstack/react-query";
-// import { logIn } from "@/query/User";
+
+
 
 
 const Register = () => {
 
-  // const queryClient = useQueryClient();
-
-  // const mutation = useMutation({
-  //   mutationFn:  logIn
-  //   });
 
   const handleRegister = (event) => {
     event.preventDefault();
-    // Handle login with username and password
-    // logIn();
+    // Handle register with username and password
   };
 
   return (
