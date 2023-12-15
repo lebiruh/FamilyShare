@@ -3,7 +3,6 @@ import moment from 'moment';
 
 export const getDbPosts = (req, res) => {
 
-  // const q = "SELECT p.*, u.id AS userId, firstName FROM posts AS p JOIN users AS u ON (p.userId = u.id)"
   const familyId = req.params.familyId;
   const q = `
     SELECT posts.*, users.firstName, users.lastName
@@ -16,7 +15,6 @@ export const getDbPosts = (req, res) => {
 
     db.query(q, [familyId, familyId], (err, data) => { 
       if (err) return res.status(500).json(err);
-      // console.log(data);
       return res.status(200).json(data);
     });
 
@@ -35,7 +33,6 @@ export const addDbPosts = (req, res) => {
 
   db.query(q, [values], (err, data) => { 
     if (err) return res.status(500).json(err);
-    // console.log(data);
     return res.status(200).json("Post has been created");
   });
 }
@@ -49,7 +46,6 @@ export const deleteDbPost = (req, res) => {
 
   db.query(q, [postId], (err, data) => { 
     if (err) return res.status(500).json(err);
-    // console.log(data);
     return res.status(200).json("Post has been deleted!");
   });
 

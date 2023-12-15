@@ -8,8 +8,6 @@ export const getDbfamily = (req, res, user) => {
     db.query(familyMember, user, (err,data) => {
       if (err)  return err;
 
-      console.log("Data get family:", data);
-
       // Extract the familyId values from the data
       const familyIds = data.map(item => item.familyId);
       
@@ -18,12 +16,6 @@ export const getDbfamily = (req, res, user) => {
       db.query(family, [familyIds], (err,data) => {
 
         if (err) return res.status(500).json(err);
-
-        // if (err)  return err;
-
-        console.log("the family names are:", data);
-
-        // if(data.length) return data;
 
         if(data.length) return res.status(200).json(data);
 
@@ -44,9 +36,6 @@ export const createDbfamily = (req, res, user) => {
 
   db.query(q, [values], (err, data) => { 
     if (err) return res.status(500).json(err);
-    console.log(data);
-
-    //ADD the creator of the family as the First Member
 
     const q = "INSERT INTO familyMember (`familyId`, `userId`) VALUES (?)"
 
@@ -57,7 +46,6 @@ export const createDbfamily = (req, res, user) => {
 
     db.query(q, [values], (err, data) => { 
       if (err) return res.status(500).json(err);
-      console.log(data);
 
       return res.status(200).json("Family created successfully");
     });

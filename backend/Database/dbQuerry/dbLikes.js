@@ -3,10 +3,8 @@ import {db} from "../../connectDB.js";
 
 export const getDbLikes = (req, res) => {
 
-  // const q = "SELECT p.*, u.id AS userId, firstName FROM posts AS p JOIN users AS u ON (p.userId = u.id)"
   const postId = req.params.postId;
 
-  console.log("Post Id for Likes: " + postId);
 
   const q = `
     SELECT likes.*
@@ -24,12 +22,8 @@ export const getDbLikes = (req, res) => {
 
 export const addDbLikes = (req, res) => {
 
-  // const q = "SELECT p.*, u.id AS userId, firstName FROM posts AS p JOIN users AS u ON (p.userId = u.id)"
   const postId = req.params.postId;
   const userId = req.body.userId;
-
-  console.log("Post Id for addLikes: " + postId);
-  console.log("Post Id for addLikes: " + userId);
         
   const query = "INSERT INTO likes (`userId`, `postId`) VALUES (?)";
 
@@ -45,11 +39,7 @@ export const addDbLikes = (req, res) => {
 
 export const removeDbLikes = (req, res) => {
 
-  // const q = "SELECT p.*, u.id AS userId, firstName FROM posts AS p JOIN users AS u ON (p.userId = u.id)"
-  // const postId = req.params.postId;
   const userId = req.body.userId;
-
-  console.log("Post Id for removeLikes: " + userId);
 
   const q = `DELETE FROM likes WHERE likes.userId = ?`;
 
