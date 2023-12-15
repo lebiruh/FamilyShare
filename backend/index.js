@@ -22,7 +22,7 @@ const port = process.env.PORT;
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000', }));
+app.use(cors({ credentials: true, origin: process.env.LOCAL_HOST, }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -41,8 +41,6 @@ const upload = multer({storage: storage})
 
 app.post('/api/upload', upload.single("file"), (req, res) => {
   const file = req.file;
-  console.log("file at backend: " + req);
-  console.log("file at backend: " + file);
   res.status(200).json(file.filename)
 })
 
@@ -64,6 +62,3 @@ app.listen(port, () => {
 });
 
 
-// mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
-// .then(() => app.listen(port, () => console.log(`Server is running on port: ${port}`)))
-// .catch((error) => console.log(error.message));

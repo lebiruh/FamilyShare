@@ -7,29 +7,21 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
-  QueryClient
 } from '@tanstack/react-query'
-// import { notFound } from 'next/navigation'
 import styled from '@emotion/styled'
 import { Image, VideoCameraBack } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
 import { getUserByEmail } from '@/query/User'
 import axios from 'axios'
-// import FileBase from 'react-file-base64';
+
 
 const Timeline = ({familyId, userId}) => {
 
   const session = useSession();
 
-  // console.log("Timeline user: ", session);
-
   const userEmail = session.data?.token.email;
 
   const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail), enabled: !!userEmail })
-
-  // const userId = user?.data?.id;  
-
-  // console.log("UserId on timeline: ", userId);
 
   const [file, setFile] = useState(null)
 
@@ -39,7 +31,6 @@ const Timeline = ({familyId, userId}) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      console.log("file is: ", formData);
       const res = await axios.post("http://localhost:5000/api/upload", formData);
       return res.data;
     } catch (err) {
@@ -75,7 +66,7 @@ const Timeline = ({familyId, userId}) => {
     })
 
   const handleDelete = (postId) => {
-    console.log("Delete post: " + postId);   
+
     getPostsMutation.mutate({postId}); 
   }
 

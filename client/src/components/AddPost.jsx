@@ -1,7 +1,7 @@
 import { createFamily } from '@/query/Family'
 import { getUserByEmail } from '@/query/User'
 import styled from '@emotion/styled'
-import { Add, Image, VideoCameraBack } from '@mui/icons-material'
+import { Add } from '@mui/icons-material'
 import { Avatar, Box, Button, Fab, Modal, Stack, TextField, Tooltip, Typography } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
@@ -25,10 +25,6 @@ const AddPost = ({userId, userEmail}) => {
 
 
   const { data: user } = useQuery({ queryKey: ["user", userEmail], queryFn: () => getUserByEmail(userEmail), enabled: !!userEmail })
-
-  console.log("userData for family frontend is: ", user);
-
-  // const userId = user?.data?.id;
 
   const handleChange = (e) => {
     setFamilyData(prev=> ({...prev, [e.target.name]: e.target.value}) );
@@ -70,8 +66,6 @@ const AddPost = ({userId, userEmail}) => {
           </UserBox>
           <TextField sx={{width:'100%'}} id='standard-multiline-static' multiline rows={2} placeholder="Group name..." variant='standard' name='familyName' onChange={handleChange} />
           <Stack direction='row' gap={1} mt={4} mb={2}>
-            {/* <Image color='secondary' />
-            <VideoCameraBack color='success'/>             */}
             <Button variant='contained'sx={{width: '100px'}} onClick={handleSubmit}>Create</Button>
           </Stack>
         </Box>

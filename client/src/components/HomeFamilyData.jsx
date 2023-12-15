@@ -1,7 +1,5 @@
 import React from 'react';
-import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, IconButton, Typography } from '@mui/material';
-import { Favorite, FavoriteBorder, MoreVert, Share } from '@mui/icons-material'
-import Image from 'next/image';
+import { Card, CardContent, Typography } from '@mui/material';
 import Link from 'next/link';
 
 const HomeFamilyData = ({data}) => {
